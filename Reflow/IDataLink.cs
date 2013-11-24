@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Reflow
+{
+    public interface IDataLink
+    {
+        bool Initialize(string connectionString);
+        bool IsConnected { get; }
+        bool Connect();
+        bool Disconnect();
+
+    }
+}

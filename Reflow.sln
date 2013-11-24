@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reflow", "Reflow\Reflow.csproj", "{0477EACB-4142-4410-A1E0-16B8AC7D6A1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reflow.Test", "Reflow.Test\Reflow.Test.csproj", "{3744AA99-38A6-4C86-B9A8-CF21F15BFFBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0477EACB-4142-4410-A1E0-16B8AC7D6A1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0477EACB-4142-4410-A1E0-16B8AC7D6A1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0477EACB-4142-4410-A1E0-16B8AC7D6A1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0477EACB-4142-4410-A1E0-16B8AC7D6A1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3744AA99-38A6-4C86-B9A8-CF21F15BFFBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3744AA99-38A6-4C86-B9A8-CF21F15BFFBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3744AA99-38A6-4C86-B9A8-CF21F15BFFBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3744AA99-38A6-4C86-B9A8-CF21F15BFFBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
