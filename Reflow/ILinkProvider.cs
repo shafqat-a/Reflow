@@ -8,7 +8,7 @@ namespace Reflow
     public interface ILinkProvider
     {
         IDataLink CreateLink(string connectionString);
-        ILinkReader CreateReader(IDataLink link);
-        ILinkWriter CreateWriter(IDataLink link);
+        ILinkReader CreateReader(IDataLink link, string query);
+        ILinkWriter CreateWriter(IDataLink link, string table);
     }
 }

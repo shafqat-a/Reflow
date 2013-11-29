@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Reflow.SqlServer
+namespace Reflow.OleDb
 {
-    public class SqlLinkProvider : ILinkProvider
+    public class OleDbLinkProvider : ILinkProvider
     {
         public IDataLink CreateLink(string connectionString)
         {
-            SqlDataLink link = new SqlDataLink();
+            OleDbDataLink link = new OleDbDataLink();
             link.Initialize(connectionString);
             return link;
         }
 
         public ILinkReader CreateReader(IDataLink link, string query)
         {
-            throw new NotImplementedException();
+            OleDbDataReader reader = new OleDbDataReader();
+            reader.Initialize(link);
+            reader.Command = query;
+            return reader;
         }
 
         public ILinkWriter CreateWriter(IDataLink link, string table)
         {
-            SqlDataWriter writer = new SqlDataWriter();
-            writer.Initialize(link);
-            return writer;
+            throw new NotImplementedException();
         }
     }
 }

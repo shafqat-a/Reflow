@@ -5,8 +5,13 @@ using System.Text;
 
 namespace Reflow.Tasks
 {
+    public delegate void TaskExecutionEventHandler(TaskExecutionContext context, TaskResult result);
     public interface ITask
     {
-        bool Execute(TaskExecutionContext context);
+        string Name { get; set; }
+        TaskResult Execute(TaskExecutionContext context);
+        
+        TaskExecutionEventHandler OnBeforeExecution { get; set; }
+        TaskExecutionEventHandler OnAfterExecution  { get; set; }
     }
 }

@@ -42,6 +42,18 @@
     <Compile Include="ColumnDefinition.cs" />
     <Compile Include="ColumnMap.cs" />
     <Compile Include="ColumnMappings.cs" />
+    <Compile Include="Helper\ColumnTypeTranslatorBase.cs" />
+    <Compile Include="ExecutionEventListener.cs" />
+    <Compile Include="Helper\IColumnTypeTranslator.cs" />
+    <Compile Include="Helper\TableBuilder.cs" />
+    <Compile Include="OleDb\OleDbDataLink.cs" />
+    <Compile Include="OleDb\OleDbDataReader.cs" />
+    <Compile Include="OleDb\OleDbDataWriter.cs" />
+    <Compile Include="OleDb\OleDbLinkProvider.cs" />
+    <Compile Include="OleDb\OleDbTypeTranslator.cs" />
+    <Compile Include="SqlServer\SqlDataLink.cs" />
+    <Compile Include="SqlServer\SqlTypeTranslator.cs" />
+    <Compile Include="Tasks\CodedTask.cs" />
     <Compile Include="Tasks\DataFlowTask.cs" />
     <Compile Include="IDataLink.cs" />
     <Compile Include="IExpression.cs" />
@@ -49,15 +61,22 @@
     <Compile Include="ILinkProvider.cs" />
     <Compile Include="ILinkReader.cs" />
     <Compile Include="ILinkWriter.cs" />
+    <Compile Include="Tasks\DiscoverSchemaTask.cs" />
     <Compile Include="Tasks\ITask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflowEngine.cs" />
     <Compile Include="SqlServer\SqlDataReader.cs" />
     <Compile Include="SqlServer\SqlDataWriter.cs" />
     <Compile Include="SqlServer\SqlLinkProvider.cs" />
-    <Compile Include="TaskExecutionContext.cs" />
+    <Compile Include="Tasks\TaskExecutionContext.cs" />
+    <Compile Include="Tasks\ScirptingTask.cs" />
+    <Compile Include="Tasks\TableCreateTask.cs" />
+    <Compile Include="Tasks\TaskBase.cs" />
+    <Compile Include="Tasks\TaskLink.cs" />
+    <Compile Include="Tasks\TaskResult.cs" />
     <Compile Include="VBScriptExpressionProvider.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

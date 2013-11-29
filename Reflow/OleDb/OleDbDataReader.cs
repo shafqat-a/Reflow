@@ -5,9 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-namespace Reflow.SqlServer
+namespace Reflow.OleDb
 {
-    public class SqlDataReader : ILinkReader
+    public class OleDbDataReader : ILinkReader
     {
         private IDataReader _reader = null;
         private IDataLink _link = null;
@@ -17,7 +17,12 @@ namespace Reflow.SqlServer
             _link = link;
         }
 
-        public string Command { get; set; }
+        public string Command
+        {
+            get;
+            set;
+        }
+
         public bool Open()
         {
             IDbCommand cmd = _link.Connection.CreateCommand();
@@ -26,7 +31,6 @@ namespace Reflow.SqlServer
             _reader = cmd.ExecuteReader();
             return true;
         }
-
 
         public bool Open(string command)
         {

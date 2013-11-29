@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
 namespace Reflow.Tasks
 {
-    public class DataFlowTask : ITask
+    public class DataFlowTask : TaskBase
     {
-        ILinkReader Input { get; set; }
-        ILinkWriter Output { get; set; }
-        ColumnMappings Mapping { get; set; }
+        public ILinkReader Input { get; set; }
+        public ILinkWriter Output { get; set; }
+        public ColumnMappings Mapping { get; set; }
+        public bool IsAutoMap { get; set; }
+        public string TableName { get; set; }
 
-        public bool Execute(TaskExecutionContext context)
+        public override TaskResult OnExecute(TaskExecutionContext context)
         {
-            return false;
+            Input.Open();
+            Output.Write(Input.Reader, TableName, context);
+            return null;
         }
     }
 }
