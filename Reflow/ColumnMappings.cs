@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Reflow
 {
-    public class ColumnMappings
+    public class ColumnMappings : List<ColumnMap>
     {
     }
 }

@@ -41,7 +41,7 @@ namespace Reflow.OleDb
         public IDataReader Reader
         {
             get
-            {
+            {               
                 return _reader;
             }
         }

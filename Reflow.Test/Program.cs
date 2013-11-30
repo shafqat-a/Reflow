@@ -1,4 +1,5 @@
 ﻿using Reflow.Tasks;
+using Reflow.Transformation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +18,10 @@ namespace Reflow.Test
 
             // Prepare reflow engine
             ReflowEngine engine = new ReflowEngine();
-            string sourceConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=f:\\Users\\shafqat\\Downloads\\AdventureWorks.accdb;Persist Security Info=False;";
+            // Test DB Path
+            string accessDBPath = AppDomain.CurrentDomain.BaseDirectory + "db1.accdb";
+            string sourceConnectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Persist Security Info=False;",
+                accessDBPath);
             ILinkProvider sqlProvider = new SqlServer.SqlLinkProvider();
             ILinkProvider oleProvider = new OleDb.OleDbLinkProvider();
             IDataLink linkSource = oleProvider.CreateLink ( sourceConnectionString);
@@ -77,6 +81,13 @@ namespace Reflow.Test
             // ColumnMappings maps = new ColumnMappings();
             task3.IsAutoMap = true;
             task3.TableName = task2.TableName;
+            // TODO: Add column mapping support
+            // Add scripting transformation 
+            ColumnMap map = new ColumnMap();
+            map.Destination = "Title";
+            Expression exp = new Expression() { Code = "UCASE(Record.Item(\"Title\"))"};
+            map.TransformExpression = exp;
+            task3.Mapping.Add(map);
 
             engine.Tasks.Add(task1);
             engine.Tasks.Add(task2);

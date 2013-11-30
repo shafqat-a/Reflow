@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClearScript">
+      <HintPath>..\References\ClearScript.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,13 +54,12 @@
     <Compile Include="OleDb\OleDbDataWriter.cs" />
     <Compile Include="OleDb\OleDbLinkProvider.cs" />
     <Compile Include="OleDb\OleDbTypeTranslator.cs" />
+    <Compile Include="Serialization\ReflowJob.cs" />
     <Compile Include="SqlServer\SqlDataLink.cs" />
     <Compile Include="SqlServer\SqlTypeTranslator.cs" />
     <Compile Include="Tasks\CodedTask.cs" />
     <Compile Include="Tasks\DataFlowTask.cs" />
     <Compile Include="IDataLink.cs" />
-    <Compile Include="IExpression.cs" />
-    <Compile Include="IExpressionProvider.cs" />
     <Compile Include="ILinkProvider.cs" />
     <Compile Include="ILinkReader.cs" />
     <Compile Include="ILinkWriter.cs" />
@@ -74,7 +76,9 @@
     <Compile Include="Tasks\TaskBase.cs" />
     <Compile Include="Tasks\TaskLink.cs" />
     <Compile Include="Tasks\TaskResult.cs" />
-    <Compile Include="VBScriptExpressionProvider.cs" />
+    <Compile Include="Transformation\Expression.cs" />
+    <Compile Include="Transformation\ScriptFactory.cs" />
+    <Compile Include="Transformation\TransformedReader.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
