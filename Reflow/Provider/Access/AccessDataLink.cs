@@ -5,9 +5,9 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 
-namespace Reflow.OleDb
+namespace Reflow.Provider.Access
 {
-    public class OleDbDataLink : IDataLink
+    public class AccessDataLink : IDataLink
     {
         OleDbConnection _connection = null;
         public bool Initialize(string connectionString)
@@ -56,7 +56,7 @@ namespace Reflow.OleDb
             cmd.CommandType = CommandType.Text;
             IDataReader reader = cmd.ExecuteReader(CommandBehavior.SchemaOnly);
             DataTable dt = reader.GetSchemaTable();
-            OleDb.OleDbTypeTranslator translator = new OleDbTypeTranslator();
+            Provider.Access.AccessDbTypeTranslator translator = new AccessDbTypeTranslator();
             // ColumnName, ColumnSize, NumericPrecision, DataType, AllowDbNull, ProviderType, 
             // IsIdentity, IsAutoIncrement, ProviderSpecificDataType, DataTypeName
             foreach (DataRow row in dt.Rows)

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Reflow.OleDb
+namespace Reflow.Provider.Access
 {
-    internal class OleDbTypeTranslator : ColumnTypeTranslatorBase
+    internal class AccessDbTypeTranslator : ColumnTypeTranslatorBase
     {
         public override char OpeningIdentifier
         {

@@ -5,9 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-namespace Reflow.OleDb
+namespace Reflow.Provider.Odbc
 {
-    public class OleDbDataReader : ILinkReader
+    public class OdbcDataReader : ILinkReader
     {
         private IDataReader _reader = null;
         private IDataLink _link = null;

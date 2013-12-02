@@ -49,27 +49,35 @@
     <Compile Include="ExecutionEventListener.cs" />
     <Compile Include="Helper\IColumnTypeTranslator.cs" />
     <Compile Include="Helper\TableBuilder.cs" />
-    <Compile Include="OleDb\OleDbDataLink.cs" />
-    <Compile Include="OleDb\OleDbDataReader.cs" />
-    <Compile Include="OleDb\OleDbDataWriter.cs" />
-    <Compile Include="OleDb\OleDbLinkProvider.cs" />
-    <Compile Include="OleDb\OleDbTypeTranslator.cs" />
+    <Compile Include="Provider\Access\AccessDataLink.cs" />
+    <Compile Include="Provider\Access\AccessDataReader.cs" />
+    <Compile Include="Provider\Access\AccessDataWriter.cs" />
+    <Compile Include="Provider\Access\AccessLinkProvider.cs" />
+    <Compile Include="Provider\Access\AccessDbTypeTranslator.cs" />
+    <Compile Include="Provider\Odbc\OleDbDataLink.cs" />
+    <Compile Include="Provider\Odbc\OleDbDataReader.cs" />
+    <Compile Include="Provider\Odbc\OleDbDataWriter.cs" />
+    <Compile Include="Provider\Odbc\OleDbLinkProvider.cs" />
+    <Compile Include="Provider\OleDb\OleDbDataLink.cs" />
+    <Compile Include="Provider\OleDb\OleDbDataReader.cs" />
+    <Compile Include="Provider\OleDb\OleDbDataWriter.cs" />
+    <Compile Include="Provider\OleDb\OleDbLinkProvider.cs" />
     <Compile Include="Serialization\ReflowJob.cs" />
-    <Compile Include="SqlServer\SqlDataLink.cs" />
-    <Compile Include="SqlServer\SqlTypeTranslator.cs" />
+    <Compile Include="Provider\SqlServer\SqlDataLink.cs" />
+    <Compile Include="Provider\SqlServer\SqlTypeTranslator.cs" />
     <Compile Include="Tasks\CodedTask.cs" />
     <Compile Include="Tasks\DataFlowTask.cs" />
-    <Compile Include="IDataLink.cs" />
-    <Compile Include="ILinkProvider.cs" />
-    <Compile Include="ILinkReader.cs" />
-    <Compile Include="ILinkWriter.cs" />
+    <Compile Include="Provider\IDataLink.cs" />
+    <Compile Include="Provider\ILinkProvider.cs" />
+    <Compile Include="Provider\ILinkReader.cs" />
+    <Compile Include="Provider\ILinkWriter.cs" />
     <Compile Include="Tasks\DiscoverSchemaTask.cs" />
     <Compile Include="Tasks\ITask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflowEngine.cs" />
-    <Compile Include="SqlServer\SqlDataReader.cs" />
-    <Compile Include="SqlServer\SqlDataWriter.cs" />
-    <Compile Include="SqlServer\SqlLinkProvider.cs" />
+    <Compile Include="Provider\SqlServer\SqlDataReader.cs" />
+    <Compile Include="Provider\SqlServer\SqlDataWriter.cs" />
+    <Compile Include="Provider\SqlServer\SqlLinkProvider.cs" />
     <Compile Include="Tasks\TaskExecutionContext.cs" />
     <Compile Include="Tasks\ScirptingTask.cs" />
     <Compile Include="Tasks\TableCreateTask.cs" />
@@ -80,7 +88,11 @@
     <Compile Include="Transformation\ScriptFactory.cs" />
     <Compile Include="Transformation\TransformedReader.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Provider\Excel\" />
+    <Folder Include="Provider\Oracle\" />
+    <Folder Include="Provider\Text\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

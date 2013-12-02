@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-namespace Reflow.SqlServer
+namespace Reflow.Provider.SqlServer
 {
     public class SqlDataWriter : ILinkWriter
     {

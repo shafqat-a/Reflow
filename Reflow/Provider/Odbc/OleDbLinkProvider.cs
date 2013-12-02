@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Reflow.OleDb
+namespace Reflow.Provider.Odbc
 {
-    public class OleDbLinkProvider : ILinkProvider
+    public class OdbcLinkProvider : ILinkProvider
     {
         public IDataLink CreateLink(string connectionString)
         {
-            OleDbDataLink link = new OleDbDataLink();
+            OdbcDataLink link = new OdbcDataLink();
             link.Initialize(connectionString);
             return link;
         }
 
         public ILinkReader CreateReader(IDataLink link, string query)
         {
-            OleDbDataReader reader = new OleDbDataReader();
+            OdbcDataReader reader = new OdbcDataReader();
             reader.Initialize(link);
             reader.Command = query;
             return reader;

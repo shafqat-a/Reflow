@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 
-namespace Reflow.OleDb
+namespace Reflow.Provider.OleDb
 {
     public class OleDbDataWriter : ILinkWriter
     {

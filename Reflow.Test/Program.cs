@@ -1,4 +1,5 @@
-﻿using Reflow.Tasks;
+﻿using Reflow.Provider;
+using Reflow.Tasks;
 using Reflow.Transformation;
 using System;
 using System.Collections.Generic;
@@ -19,15 +20,33 @@ namespace Reflow.Test
             // Prepare reflow engine
             ReflowEngine engine = new ReflowEngine();
             // Test DB Path
-            string accessDBPath = AppDomain.CurrentDomain.BaseDirectory + "db1.accdb";
-            string sourceConnectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Persist Security Info=False;",
-                accessDBPath);
-            ILinkProvider sqlProvider = new SqlServer.SqlLinkProvider();
-            ILinkProvider oleProvider = new OleDb.OleDbLinkProvider();
-            IDataLink linkSource = oleProvider.CreateLink ( sourceConnectionString);
 
+            string test = "access"; // "access";
+            string sourceConnectionString = string.Empty;
+
+            ILinkProvider sourceProvider = null;
+            if (test == "access")
+            {
+                string accessDBPath = AppDomain.CurrentDomain.BaseDirectory + "db1.accdb";
+                sourceConnectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Persist Security Info=False;",
+                    accessDBPath);
+                sourceProvider = new Provider.Access.AccessLinkProvider();
+            }
+            else if (test == "text")
+            {
+                // TODO: Test and implement text driver
+                string txtDBPath = AppDomain.CurrentDomain.BaseDirectory + "text\\";
+                sourceConnectionString = "Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" + txtDBPath + ";Extensions=asc,csv,tab,txt;";
+                sourceProvider = new Provider.Odbc.OdbcLinkProvider();
+            } 
+
+            IDataLink linkSource = sourceProvider.CreateLink ( sourceConnectionString);
+
+            ILinkProvider sqlProvider = new Provider.SqlServer.SqlLinkProvider();
             string destConnectionString = "Server=localhost;Database=AdventureWorks2012;Trusted_Connection=True;";
             IDataLink linkDestination = sqlProvider.CreateLink(destConnectionString);
+
+            // Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=c:\txtFilesFolder\;Extensions=asc,csv,tab,txt;
 
             string selectQuery = "Select * from HumanResources_Employee";
             //string selectQuery = "Select * from Production_BillOfMaterials";
@@ -71,7 +90,7 @@ namespace Reflow.Test
 
 
             DataFlowTask task3 = new DataFlowTask() { Name = "DataCopyTask" };
-            ILinkReader reader = oleProvider.CreateReader(linkSource, selectQuery); // Since we are using same query 
+            ILinkReader reader = sourceProvider.CreateReader(linkSource, selectQuery); // Since we are using same query 
             ILinkWriter writer = sqlProvider.CreateWriter(linkDestination, task2.TableName); //  Dest table
             task3.Input = reader;
             task3.Output = writer;          
@@ -85,7 +104,7 @@ namespace Reflow.Test
             // Add scripting transformation 
             ColumnMap map = new ColumnMap();
             map.Destination = "Title";
-            Expression exp = new Expression() { Code = "UCASE(Record.Item(\"Title\"))"};
+            Expression exp = new Expression() { Code = "UCASE(Record.Item(\"Title\")) & CSTR(Record.Item(\"NationalIDNumber\"))"};
             map.TransformExpression = exp;
             task3.Mapping.Add(map);
 

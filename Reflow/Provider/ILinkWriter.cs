@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 
-namespace Reflow
+namespace Reflow.Provider
 {
     public interface ILinkWriter
     {
