@@ -69,14 +69,46 @@ namespace Reflow.Transformation
             {
                 // TODO: Implement scripting transformation here
                 _rec.Clear();
+                StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < _source.FieldCount; i++)
                 {
                     _rec[_fields[i]] = _source.GetValue(i);
+                    sb.AppendLine(string.Format("{0} = {1}",_fields[i], GetStringExpression(_source.GetValue(i))));
                 }
 
-                _eng.Execute(this.TransformationScript);
+                //Console.WriteLine(sb.ToString());
+                _eng.Execute(sb.ToString() + "\r\n"+ this.TransformationScript);
             }
             return result;
+        }
+
+        private string GetStringExpression(object value)
+        {
+            if (value is string || value is DateTime || value is Guid)
+            {
+                return "\"" + value.ToString().Replace("\"", "\"\"").Replace("\n", "\" + chr(13) +\"" ) + "\"";
+            }
+            else if (value == null )
+            {
+                return "Null";
+            }
+            else if (value == DBNull.Value)
+            {
+                return "Null";
+            }
+            else
+            {
+
+                if (string.IsNullOrEmpty(value.ToString()))
+                {
+                    int a = 1;
+                    return ""; 
+                }
+                else
+                {
+                    return value.ToString();
+                }
+            }
         }
 
         public object GetValue(int i)

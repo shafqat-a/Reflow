@@ -100,11 +100,12 @@ namespace Reflow.Test
             // ColumnMappings maps = new ColumnMappings();
             task3.IsAutoMap = true;
             task3.TableName = task2.TableName;
+            
             // TODO: Add column mapping support
             // Add scripting transformation 
             ColumnMap map = new ColumnMap();
             map.Destination = "Title";
-            Expression exp = new Expression() { Code = "UCASE(Record.Item(\"Title\")) & CSTR(Record.Item(\"NationalIDNumber\"))"};
+            Expression exp = new Expression() { Code = "UCASE(Title)"};
             map.TransformExpression = exp;
             task3.Mapping.Add(map);
 
