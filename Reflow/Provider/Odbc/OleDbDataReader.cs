@@ -25,7 +25,7 @@ namespace Reflow.Provider.Odbc
 
         public bool Open()
         {
-            IDbCommand cmd = _link.Connection.CreateCommand();
+            IDbCommand cmd = ((OdbcDataLink)_link).Connection.CreateCommand();
             cmd.CommandText = this.Command;
             cmd.CommandType = CommandType.Text;
             _reader = cmd.ExecuteReader();

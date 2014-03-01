@@ -20,7 +20,7 @@ namespace Reflow.Provider.SqlServer
 
         public void Write(IDataReader source, string table, TaskExecutionContext context)
         {
-            SqlBulkCopy sc = new SqlBulkCopy(_link.Connection as SqlConnection);
+            SqlBulkCopy sc = new SqlBulkCopy(((SqlDataLink)_link).Connection as SqlConnection);
             sc.DestinationTableName = table;
             sc.SqlRowsCopied += delegate(object sender, SqlRowsCopiedEventArgs e)
             {

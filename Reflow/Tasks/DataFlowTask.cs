@@ -8,6 +8,7 @@ using System.Text;
 
 namespace Reflow.Tasks
 {
+    [Serializable]
     public class DataFlowTask : TaskBase
     {
         public ILinkReader Input { get; set; }

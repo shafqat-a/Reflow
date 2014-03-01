@@ -12,7 +12,6 @@ namespace Reflow.Provider
         bool IsConnected { get; }
         bool Connect();
         bool Disconnect();
-        IDbConnection Connection { get; }
         ColumnDefinition[] GetSchema(string query);
         bool CreateTable(string tableName, ColumnDefinition[] columns, bool shouldDropExisting);
     }

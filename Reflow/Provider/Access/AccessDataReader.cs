@@ -25,7 +25,7 @@ namespace Reflow.Provider.Access
 
         public bool Open()
         {
-            IDbCommand cmd = _link.Connection.CreateCommand();
+            IDbCommand cmd = ((AccessDataLink)_link).Connection.CreateCommand();
             cmd.CommandText = this.Command;
             cmd.CommandType = CommandType.Text;
             _reader = cmd.ExecuteReader();

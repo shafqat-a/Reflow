@@ -20,7 +20,8 @@ namespace Reflow.Provider.SqlServer
         public string Command { get; set; }
         public bool Open()
         {
-            IDbCommand cmd = _link.Connection.CreateCommand();
+            SqlDataLink link = _link as SqlDataLink;
+            IDbCommand cmd = link.Connection.CreateCommand();
             cmd.CommandText = this.Command;
             cmd.CommandType = CommandType.Text;
             _reader = cmd.ExecuteReader();

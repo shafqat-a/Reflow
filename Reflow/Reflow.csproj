@@ -9,8 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Reflow</RootNamespace>
     <AssemblyName>Reflow</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClearScript">
@@ -62,9 +69,15 @@
     <Compile Include="Provider\OleDb\OleDbDataReader.cs" />
     <Compile Include="Provider\OleDb\OleDbDataWriter.cs" />
     <Compile Include="Provider\OleDb\OleDbLinkProvider.cs" />
+    <Compile Include="Provider\Text\DelimitedReader.cs" />
+    <Compile Include="Provider\Text\TextLink.cs" />
+    <Compile Include="Provider\Text\TextProvider.cs" />
+    <Compile Include="Provider\Text\TextReader.cs" />
+    <Compile Include="Provider\Text\TextWriter.cs" />
     <Compile Include="Serialization\ReflowJob.cs" />
     <Compile Include="Provider\SqlServer\SqlDataLink.cs" />
     <Compile Include="Provider\SqlServer\SqlTypeTranslator.cs" />
+    <Compile Include="Serialization\ReflowPackage.cs" />
     <Compile Include="Tasks\CodedTask.cs" />
     <Compile Include="Tasks\DataFlowTask.cs" />
     <Compile Include="Provider\IDataLink.cs" />
@@ -91,7 +104,6 @@
   <ItemGroup>
     <Folder Include="Provider\Excel\" />
     <Folder Include="Provider\Oracle\" />
-    <Folder Include="Provider\Text\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

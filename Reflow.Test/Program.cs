@@ -1,8 +1,10 @@
 ﻿using Reflow.Provider;
+using Reflow.Serialization;
 using Reflow.Tasks;
 using Reflow.Transformation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Reflow.Test
@@ -11,6 +13,7 @@ namespace Reflow.Test
     {
         static void Main(string[] args)
         {
+
             // Read a table from sql server via a query, then make an exact copy 
             // of that table.
             // Step 1. Read source table schema
@@ -21,7 +24,7 @@ namespace Reflow.Test
             ReflowEngine engine = new ReflowEngine();
             // Test DB Path
 
-            string test = "access"; // "access";
+            string test = "text"; // "access";
             string sourceConnectionString = string.Empty;
 
             ILinkProvider sourceProvider = null;
@@ -35,21 +38,22 @@ namespace Reflow.Test
             else if (test == "text")
             {
                 // TODO: Test and implement text driver
-                string txtDBPath = AppDomain.CurrentDomain.BaseDirectory + "text\\";
-                sourceConnectionString = "Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" + txtDBPath + ";Extensions=asc,csv,tab,txt;";
-                sourceProvider = new Provider.Odbc.OdbcLinkProvider();
+                string txtDBPath = AppDomain.CurrentDomain.BaseDirectory + "text\\HumanResources_Employee.txt";
+                sourceConnectionString = "@File="+txtDBPath + ";@Type=Delimited;RowSeperator=\r\n;ColumnSeperator=,;FirstRowHasNames=True";
+                // TODO: Fixed length - Need to implement
+                //sourceConnectionString = "@File="+txtDBPath + ";@Type=Fixed;";
+                sourceProvider = new Provider.Text.TextProvider();
             } 
 
             IDataLink linkSource = sourceProvider.CreateLink ( sourceConnectionString);
 
             ILinkProvider sqlProvider = new Provider.SqlServer.SqlLinkProvider();
-            string destConnectionString = "Server=localhost;Database=AdventureWorks2012;Trusted_Connection=True;";
+            string destConnectionString = "Server=localhost;Database=REflow;Trusted_Connection=True;";
             IDataLink linkDestination = sqlProvider.CreateLink(destConnectionString);
 
             // Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=c:\txtFilesFolder\;Extensions=asc,csv,tab,txt;
 
             string selectQuery = "Select * from HumanResources_Employee";
-            //string selectQuery = "Select * from Production_BillOfMaterials";
 
             // First lets discover the schema of the query [source table]
             DiscoverSchemaTask task1 = new DiscoverSchemaTask();
@@ -105,14 +109,15 @@ namespace Reflow.Test
             // Add scripting transformation 
             ColumnMap map = new ColumnMap();
             map.Destination = "Title";
-            Expression exp = new Expression() { Code = "UCASE(Title)"};
+            Expression exp = new Expression() { Code = "NationalIDNumber & \" \" &  UCASE(Title) & CSTR(LEN(Title))"};
             map.TransformExpression = exp;
             task3.Mapping.Add(map);
 
             engine.Tasks.Add(task1);
             engine.Tasks.Add(task2);
             engine.Tasks.Add(task3);
-            
+
+   
             ExecutionEventListener eventListener = new ExecutionEventListener();
             eventListener.OnTaskExecutionEvent+= delegate (string taskname, string eventName, string description)
             {
@@ -125,3 +130,17 @@ namespace Reflow.Test
         }
     }
 }
+
+/*
+ReflowJob job = new ReflowJob();
+job.Tasks.Add(task1);
+;8job.Tasks.Add(task2);
+job.Tasks.Add(task3);
+
+string filepath = AppDomain.CurrentDomain.BaseDirectory + "pack.xml";
+if (File.Exists ( filepath)) { File.Delete(filepath);}
+using (FileStream fs = new FileStream(filepath, FileMode.CreateNew))
+{
+    ReflowPackage.SavePackage(fs, job);
+}*/
+

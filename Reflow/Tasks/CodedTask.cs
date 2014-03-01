@@ -17,7 +17,13 @@ namespace Reflow.Tasks
             {
                 return this.OnCodedExecute(context);
             }
-            return new TaskResult() { IsSuccess = true, Message = "Blank coded task executed", Output = null };
+
+            return new TaskResult() 
+            { 
+                IsSuccess = true, 
+                Message = "Blank coded task executed.",
+                Output = null 
+            };
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Reflow.Tasks
 {
@@ -26,13 +27,14 @@ namespace Reflow.Tasks
 
         public abstract TaskResult OnExecute(TaskExecutionContext context);
 
-
+        [XmlIgnore]
         public virtual TaskExecutionEventHandler OnBeforeExecution
         {
             get;
             set;
         }
 
+        [XmlIgnore]
         public virtual TaskExecutionEventHandler OnAfterExecution
         {
             get;
