@@ -1,0 +1,51 @@
+﻿@if (Session["import_file_path"]!= null)
+{
+    <form action="/home/mapping" method="post">
+
+        <table>
+            <tr>
+                <td>
+                    <label for="TableName">Target Table Name:</label>
+                </td>
+                <td>
+                    <input type="text" name="TableName" id="TableName" value="abc" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="IsFirstRowHeader">Does first contain headers:</label>
+                </td>
+                <td>
+                    <input type="checkbox" name="IsFirstRowHeader" id="IsFirstRowHeader">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="RowDelimiter">Row Delimiter:</label>
+                </td>
+                <td>
+                    <select name="RowDelimiter" id="RowDelimiter">
+                        <option value="{cr lf}" selected>New Line</option>
+                        <option value="|">Pipe |</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="ColumnDelimiter">ColumnDelimiter:</label></td>
+                <td>
+                    <select name="ColumnDelimiter" id="ColumnDelimiter">
+                        <option value="," selected>Comma</option>
+                        <option value="{tab}">Tab</option>
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Next >"></td>
+            </tr>
+
+            
+        </table>
+    </form>
+}

@@ -1,0 +1,10 @@
+﻿@if (Session["import_file_path"]== null)
+{ 
+    <form action="/home/upload" method="post" enctype="multipart/form-data">
+
+        <label for="csv">Csv file to import:</label>
+        <input type="file" name="csv" id="csv">
+
+        <input type="submit" value="Upload">
+    </form>
+}
