@@ -62,6 +62,8 @@ namespace Reflow.Transformation
         }
 
         Dictionary<string, object> _rec = new Dictionary<string, object>();
+        internal ColumnMappings Maps { get; set; }
+
         public bool Read()
         {
             bool result = _source.Read();
@@ -73,7 +75,8 @@ namespace Reflow.Transformation
                 for (int i = 0; i < _source.FieldCount; i++)
                 {
                     _rec[_fields[i]] = _source.GetValue(i);
-                    sb.AppendLine(string.Format("{0} = {1}",_fields[i], GetStringExpression(_source.GetValue(i))));
+                    //sb.AppendLine(string.Format("{0} = {1}",_fields[i], GetStringExpression(_source.GetValue(i))));
+                    sb.AppendLine(string.Format("{0} = {1}", _fields[i], "Record.Item(\"" + _fields[i] +"\")"));
                 }
 
                 //Console.WriteLine(sb.ToString());
@@ -130,7 +133,14 @@ namespace Reflow.Transformation
 
         public int FieldCount
         {
-            get { return _source.FieldCount; }
+            get 
+            {
+                if (this.Maps!=null)
+                {
+                    return this.Maps.Count;
+                }
+                return _source.FieldCount; 
+            }
         }
 
         public bool GetBoolean(int i)

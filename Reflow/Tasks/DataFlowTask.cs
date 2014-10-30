@@ -26,6 +26,7 @@ namespace Reflow.Tasks
         {
             Input.Open();
             TransformedReader reader = new TransformedReader(Input.Reader);
+            reader.Maps = this.Mapping;
             reader.ScriptingLanguage = "VBScript";
             reader.TransformationScript = BuildScript();
             reader.Init();
