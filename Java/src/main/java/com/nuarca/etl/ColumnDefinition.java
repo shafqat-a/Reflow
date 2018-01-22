@@ -1,5 +1,9 @@
 package com.nuarca.etl;
 
+import java.sql.JDBCType;
+import java.sql.SQLType;
+import java.sql.Types;
+
 public class ColumnDefinition {
 
     private String _ColumnName;
@@ -93,15 +97,15 @@ public class ColumnDefinition {
     }
 
     // TODO: Put a proper data type here based on JDBC
-    /*
-    private System.Data.DbType _DataType = new System.Data.DbType();
-    public System.Data.DbType getDataType() {
+
+    private JDBCType _DataType = JDBCType.VARCHAR
+    public JDBCType getDataType() {
         return _DataType;
     }
 
-    public void setDataType(System.Data.DbType value) {
+    public void setDataType(JDBCType value) {
         _DataType = value;
-    }*/
+    }
 
     private boolean _IsUnique;
     public boolean getIsUnique() {

@@ -12,6 +12,7 @@ import com.nuarca.etl.helper.TableGenerator;
 import com.nuarca.etl.provider.IDataLink;
 import com.nuarca.etl.provider.SqlServer.SqlTypeTranslator;
 
+import javax.tools.JavaCompiler;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,8 @@ public class SqlDataLink   implements IDataLink
     Connection _connection = null;
     public boolean initialize(String connectionString) throws Exception {
 
-        Driver driver = Class.forName("com.microsoft.sqlsserver.jdbc.SQLServerDriver").newInstance();
-        Connection conn = driver.connect(connectionString, new Properties())
+        Driver driver = (Driver) Class.forName("com.microsoft.sqlsserver.jdbc.SQLServerDriver").newInstance();
+        Connection conn = driver.connect(connectionString, new Properties());
         _connection = conn;
         return true;
     }
@@ -53,24 +54,26 @@ public class SqlDataLink   implements IDataLink
     public ColumnDefinition[] getSchema(String query) throws Exception {
         List<ColumnDefinition> items = new ArrayList<ColumnDefinition>();
 
+
         Statement cmd = _connection.prepareCall( query );
         ResultSet reader = cmd.executeQuery(query);
-        DataTable dt = reader.GetSchemaTable();
-        for (Object __dummyForeachVar0 : dt.Rows)
-        {
-            // ColumnName, ColumnSize, NumericPrecision, DataType, AllowDbNull, ProviderType,
-            // IsIdentity, IsAutoIncrement, ProviderSpecificDataType, DataTypeName
-            DataRow row = (DataRow)__dummyForeachVar0;
+        ResultSetMetaData meta = reader.getMetaData();
+
+        int colCount = meta.getColumnCount();
+
+        for( int i = 0; i < colCount; i++){
             ColumnDefinition col = new ColumnDefinition();
-            col.setColumnName(row["ColumnName"] instanceof String ? (String)row["ColumnName"] : (String)null);
-            col.setLength((int)row["ColumnSize"]);
-            //string systemDbTypeName = col[""] as string;
+            col.setColumnName(meta.getColumnName(i));
+            col.setIsNullable(meta.isNullable(i)==1);
+            col.setLength( meta.getPrecision(i));
             items.add(col);
+
         }
         return ((ColumnDefinition[]) items.toArray());
     }
 
     public boolean createTable(String tableName, ColumnDefinition[] columns, boolean shouldDropExisting) throws Exception {
+        /*
         TableGenerator tgen = new TableGenerator(new SqlTypeTranslator());
         String script = tgen.GenerateTableScript(tableName, columns);
         SqlCommand cmd = _connection.CreateCommand();
@@ -90,6 +93,7 @@ public class SqlDataLink   implements IDataLink
 
         cmd.CommandText = script;
         cmd.ExecuteNonQuery();
+        */
         return true;
     }
 
