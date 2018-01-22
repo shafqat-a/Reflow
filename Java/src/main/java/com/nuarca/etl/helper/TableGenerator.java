@@ -7,7 +7,7 @@ package com.nuarca.etl.helper;
 import CS2JNet.System.StringSupport;
 import CS2JNet.System.Text.StringBuilderSupport;
 import com.nuarca.etl.ColumnDefinition;
-import com.nuarca.etl.Helper.IColumnTypeTranslator;
+import com.nuarca.etl.helper.IColumnTypeTranslator;
 
 public class TableGenerator   
 {

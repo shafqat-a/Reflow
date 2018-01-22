@@ -6,7 +6,7 @@ package com.nuarca.etl.helper;
 
 import CS2JNet.System.StringSupport;
 import com.nuarca.etl.ColumnDefinition;
-import com.nuarca.etl.Helper.IColumnTypeTranslator;
+import com.nuarca.etl.helper.IColumnTypeTranslator;
 
 import java.sql.JDBCType;
 import java.sql.SQLType;
@@ -47,11 +47,11 @@ public abstract class ColumnTypeTranslatorBase   implements IColumnTypeTranslato
         }
         else if (jdbdType.equals(JDBCType.DECIMAL))
         {
-            return this.GetDecimalExpression(dataType);
+            return this.getDecimalExpression(dataType);
         }
         else if (jdbdType.equals(JDBCType.DOUBLE))
         {
-            return this.GetDoubleExpression(dataType);
+            return this.getDoubleExpression(dataType);
         }
         //else if (jdbdType.equals(DbType.Guid))
         //{
@@ -59,42 +59,51 @@ public abstract class ColumnTypeTranslatorBase   implements IColumnTypeTranslato
         //}
         else if (jdbdType.equals(JDBCType.SMALLINT))
         {
-            return this.GetInt16Expression(dataType);
+            return this.getInt16Expression(dataType);
         }
         else if (jdbdType.equals(JDBCType.INTEGER))
         {
-            return this.GetInt32Expression(dataType);
+            return this.getInt32Expression(dataType);
         }
         else if (jdbdType.equals(JDBCType.BIGINT))
         {
-            return this.GetInt64Expression(dataType);
+            return this.getInt64Expression(dataType);
         }
         //else if (jdbdType.equals(DbType.))
         //{
         //    return this.GetSingleExpression(dataType);
         //}
-        else if (jdbdType.equals(DbType.String))
+        else if (jdbdType.equals(JDBCType.VARCHAR))
         {
-            return this.GetStringExpression(dataType);
+            return this.getStringExpression(dataType);
         }
-        else if (jdbdType.equals(DbType.StringFixedLength))
+        else if (jdbdType.equals(JDBCType.NVARCHAR))
         {
-            return this.GetStringFixedLengthExpression(dataType);
+            return this.getStringExpression(dataType);
         }
-        else if (jdbdType.equals(DbType.UInt16))
+
+        else if (jdbdType.equals(JDBCType.CHAR))
         {
-            return this.GetUInt16Expression(dataType);
+            return this.getStringFixedLengthExpression(dataType);
         }
-        else if (jdbdType.equals(DbType.UInt32))
+        else if (jdbdType.equals(JDBCType.NCHAR))
         {
-            return this.GetUInt32Expression(dataType);
+            return this.getStringFixedLengthExpression(dataType);
         }
-        else if (jdbdType.equals(DbType.UInt64))
+        else if (jdbdType.equals(JDBCType.SMALLINT))
         {
-            return this.GetUInt64Expression(dataType);
+            return this.getUInt16Expression(dataType);
+        }
+        else if (jdbdType.equals(JDBCType.INTEGER))
+        {
+            return this.getUInt32Expression(dataType);
+        }
+        else if (jdbdType.equals(JDBCType.BIGINT))
+        {
+            return this.getUInt64Expression(dataType);
         }
                            
-        throw new NotSupportedException("Data type not supported");
+        throw new Exception("Data type not supported");
     }
 
     public String getNextStatementIdentifier() throws Exception {
@@ -194,15 +203,15 @@ public abstract class ColumnTypeTranslatorBase   implements IColumnTypeTranslato
     }
 
     public String getUInt16Expression(ColumnDefinition dataType) throws Exception {
-        return this.GetInt16Expression(dataType);
+        return this.getInt16Expression(dataType);
     }
 
     public String getUInt32Expression(ColumnDefinition dataType) throws Exception {
-        return this.GetInt32Expression(dataType);
+        return this.getInt32Expression(dataType);
     }
 
     public String getUInt64Expression(ColumnDefinition dataType) throws Exception {
-        return this.GetInt64Expression(dataType);
+        return this.getInt64Expression(dataType);
     }
 
     public abstract char getOpeningIdentifier() throws Exception ;
@@ -312,7 +321,7 @@ public abstract class ColumnTypeTranslatorBase   implements IColumnTypeTranslato
             closingIdentifier = ' ';
         }
          
-        return String.Format("{0}{1}{2} {3} {4} {5}{6}", openingIdentifier, typeName, closingIdentifier, lengthExpression, nullExpression, defaultExpression, uniqueString);
+        return String.format("%1$s%2$s%3$s %4$s %5$s %6$s%7$s", openingIdentifier, typeName, closingIdentifier, lengthExpression, nullExpression, defaultExpression, uniqueString);
     }
 
     public boolean getSupportsIdentifierAroundTypename() throws Exception {
@@ -337,57 +346,57 @@ public abstract class ColumnTypeTranslatorBase   implements IColumnTypeTranslato
             closingIdentifier = ' ';
         }
          
-        return String.Format("{0}{1}{2} ({3},{4}) {5} {6}", openingIdentifier, typeName, closingIdentifier, precison, scale, nullExpression, defaultExpression);
+        return String.format("%1$s%2$s%3$s (%4$s,%5$s) %6$s %7$s", openingIdentifier, typeName, closingIdentifier, precison, scale, nullExpression, defaultExpression);
     }
 
-    public DbType getDbTypeFromSystemTypeString(String systemType) throws Exception {
+    public JDBCType getDbTypeFromSystemTypeString(String systemType) throws Exception {
         String __dummyScrutVar1 = systemType;
         if (__dummyScrutVar1.equals("System.String"))
         {
-            return DbType.AnsiString;
+            return JDBCType.VARCHAR;
         }
         else if (__dummyScrutVar1.equals("System.Char"))
         {
-            return DbType.AnsiStringFixedLength;
+            return JDBCType.CHAR;
         }
         else if (__dummyScrutVar1.equals("System.Int32"))
         {
-            return DbType.Int32;
+            return JDBCType.INTEGER;
         }
         else if (__dummyScrutVar1.equals("System.Int64"))
         {
-            return DbType.Int64;
+            return JDBCType.BIGINT;
         }
         else if (__dummyScrutVar1.equals("System.Decimal"))
         {
-            return DbType.Decimal;
+            return JDBCType.DOUBLE;
         }
         else if (__dummyScrutVar1.equals("System.Double"))
         {
-            return DbType.Double;
+            return JDBCType.DOUBLE;
         }
         else if (__dummyScrutVar1.equals("System.DateTime"))
         {
-            return DbType.DateTime;
+            return JDBCType.DATE;
         }
         else if (__dummyScrutVar1.equals("System.int16"))
         {
-            return DbType.Int16;
+            return JDBCType.SMALLINT;
         }
         else if (__dummyScrutVar1.equals("System.Byte[]"))
         {
-            return DbType.Binary;
+            return JDBCType.BINARY;
         }
         else if (__dummyScrutVar1.equals("System.Guid"))
         {
-            return DbType.Guid;
+            return JDBCType.BINARY;
         }
         else if (__dummyScrutVar1.equals("System.Boolean"))
         {
-            return DbType.Boolean;
+            return JDBCType.BOOLEAN;
         }
                    
-        return DbType.AnsiString;
+        return JDBCType.VARCHAR;
     }
 
 }

@@ -6,11 +6,11 @@ package com.nuarca.etl.provider.sqlserver;
 
 
 
-import CS2JNet.System.Collections.LCC.CSList;
+
 import com.nuarca.etl.ColumnDefinition;
 import com.nuarca.etl.helper.TableGenerator;
 import com.nuarca.etl.provider.IDataLink;
-import com.nuarca.etl.provider.SqlServer.SqlTypeTranslator;
+import com.nuarca.etl.provider.sqlserver.SqlTypeTranslator;
 
 import javax.tools.JavaCompiler;
 import java.sql.*;

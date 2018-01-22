@@ -98,7 +98,7 @@ public class ColumnDefinition {
 
     // TODO: Put a proper data type here based on JDBC
 
-    private JDBCType _DataType = JDBCType.VARCHAR
+    private JDBCType _DataType = JDBCType.VARCHAR;
     public JDBCType getDataType() {
         return _DataType;
     }

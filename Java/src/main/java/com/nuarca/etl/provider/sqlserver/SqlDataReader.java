@@ -6,9 +6,14 @@ package com.nuarca.etl.provider.sqlserver;
 
 import com.nuarca.etl.provider.IDataLink;
 import com.nuarca.etl.provider.ILinkReader;
-import com.nuarca.etl.provider.SqlServer.SqlDataLink;
+import com.nuarca.etl.provider.sqlserver.SqlDataLink;
 
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SqlDataReader   implements ILinkReader
 {
@@ -30,10 +35,12 @@ public class SqlDataReader   implements ILinkReader
     public boolean open() throws Exception {
 
         SqlDataLink link = _link instanceof SqlDataLink ? (SqlDataLink)_link : (SqlDataLink)null;
-        IDbCommand cmd = link.getConnection().CreateCommand();
-        cmd.CommandText = this.getCommand();
-        cmd.CommandType = CommandType.Text;
-        _reader = cmd.ExecuteReader();
+        //IDbCommand cmd = link.getConnection().CreateCommand();
+        //cmd.CommandText = this.getCommand();
+        //cmd.CommandType = CommandType.Text;
+        //CallableStatement stmt = link.getConnection().prepareCall (this.getCommand());
+        Statement stm= link.getConnection().createStatement();
+        _reader =  stm.executeQuery(this.getCommand());
         return true;
     }
 
