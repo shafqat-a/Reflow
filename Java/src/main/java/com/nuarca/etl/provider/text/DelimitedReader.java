@@ -24,6 +24,10 @@ public class DelimitedReader implements java.sql.ResultSet {
     boolean _headerFound = false;
     StringBuilder _sbRecord = new StringBuilder();
 
+    public DelimitedReader() {
+
+    }
+
     public DelimitedReader(InputStream stream) throws Exception {
         _stream = stream;
         this.setBufferSize(255);

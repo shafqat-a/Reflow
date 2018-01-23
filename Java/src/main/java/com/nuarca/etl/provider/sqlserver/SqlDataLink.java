@@ -23,8 +23,9 @@ public class SqlDataLink   implements IDataLink
     Connection _connection = null;
     public boolean initialize(String connectionString) throws Exception {
 
-        Driver driver = (Driver) Class.forName("com.microsoft.sqlsserver.jdbc.SQLServerDriver").newInstance();
-        Connection conn = driver.connect(connectionString, new Properties());
+        //Driver driver = DriverManager.getConnection(connectionString);
+        //Driver driver = (Driver) Class.forName("com.microsoft.sqlsserver.jdbc.SQLServerDriver").newInstance();
+        Connection conn = DriverManager.getConnection(connectionString); //driver.connect(connectionString, new Properties());
         _connection = conn;
         return true;
     }

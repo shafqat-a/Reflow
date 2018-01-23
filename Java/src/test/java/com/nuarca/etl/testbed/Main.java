@@ -7,6 +7,7 @@ import com.nuarca.etl.provider.ILinkWriter;
 import com.nuarca.etl.provider.sqlserver.SqlLinkProvider;
 import com.nuarca.etl.provider.text.DelimitedReader;
 import com.nuarca.etl.provider.text.TextProvider;
+import com.nuarca.etl.tasks.DataFlowTask;
 
 
 import javax.script.ScriptEngine;
@@ -18,33 +19,52 @@ public class Main {
 
     public static void main ( String[] argv){
 
-        testTextDelimitedReader("/home/shafqat/Documents/employee.csv");
-        testScriptEngine ();
+        //testTextDelimitedReader("/home/shafqat/Documents/employee.csv");
+        //testScriptEngine ();
         testCsvImportBasic();
 
     }
 
     public static void testCsvImportBasic() {
 
+
+
         try {
 
             TextProvider tprov = new TextProvider();
-            IDataLink lnkSrc =  tprov.createLink("@Type=Delimited;@File=/home/shafqat/git/reflow/Java/src/test/res/data.csv");
+            IDataLink lnkSrc =  tprov.createLink("@Type=Delimited;File=/home/shafqat/git/reflow/Java/src/test/res/data.csv");
             ILinkReader reader = tprov.createReader(lnkSrc, "Select * from data.csv");
 
-            String sqlConnectionString = "";
+            String sqlConnectionString = "jdbc:sqlserver://11.10.111.1:1433;databaseName=test;user=sa;password=orion123@";
             SqlLinkProvider destProv = new SqlLinkProvider();
             IDataLink lnkDst = destProv.createLink(sqlConnectionString);
             ILinkWriter writer = destProv.createWriter(lnkDst, "abc");
 
+            ReflowEngine engine = new ReflowEngine();
 
+            DataFlowTask flow = new DataFlowTask();
+            flow.setInput(reader);
+            flow.setOutput(writer);
+            flow.setIsAutoMap(true);
+            flow.setTableName("abc");
+
+            engine.getTasks().add(flow);
+
+            ExecutionEventListener exec = new ExecutionEventListener();
+            exec.setOnTaskExecutionEvent( (taskName, eventName, description) -> {
+               System.out.println(taskName + " | " + eventName + " | "  + description);
+            });
+
+            engine.execute(exec);
 
         } catch ( Exception ex){
-
+            System.out.println(ex);
         }
 
 
     }
+
+
 
     public static void testTextDelimitedReader (String filename){
 
