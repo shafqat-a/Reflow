@@ -42,6 +42,8 @@ public class TextLink   implements IDataLink
 
 
     public ColumnDefinition[] getSchema(String query) throws Exception {
+
+        throw new Exception("Not implemented");
 //        TextReader reader = new TextReader();
 //        reader.initialize(this);
 //        reader.open();
@@ -61,7 +63,7 @@ public class TextLink   implements IDataLink
 //        }
 //        reader.getReader().Close();
 //        return ((ColumnDefinition[]) items.toArray());
-        return null;
+        //return null;
     }
 
 
