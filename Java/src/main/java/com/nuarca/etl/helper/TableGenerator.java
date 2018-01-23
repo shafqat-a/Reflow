@@ -19,7 +19,7 @@ public class TableGenerator
     /**
     * Drops the table
     * 
-    *  @param objectType 
+    *  @param
     *  @return
     */
     public String generateTableDropScript(String tableName) throws Exception {
@@ -31,7 +31,7 @@ public class TableGenerator
     /**
     * Generates table creation script for a database
     * 
-    *  @param objectType 
+    *  @param
     *  @return
     */
     public String generateTableScript(String tableName, ColumnDefinition[] columns) throws Exception {
@@ -45,7 +45,7 @@ public class TableGenerator
         {
             StringBuilder sbField = new StringBuilder();
             //ProcessColumnForConstraint(column, sbBeforeTable, sbField, sbAfterTable, sbPostGeneration);
-            String sql = GetCreateSQLForColumn(column);
+            String sql = getCreateSQLForColumn(column);
             if (!sql.equals(""))
             {
                 sb.append("\t");
@@ -108,10 +108,6 @@ public class TableGenerator
     /**
     * Generate the constatn string
     * 
-    *  @param pinfo 
-    *  @param sbBeforeTable 
-    *  @param sbField 
-    *  @param sbAfterTable 
     *  @return
     */
     //private bool ProcessColumnForConstraint<T>(ColumnDefinition pinfo, StringBuilder sbBeforeTable, StringBuilder sbField, StringBuilder sbAfterTable, StringBuilder sbPostGeneration) where T : ConstraintAttribute
@@ -152,7 +148,7 @@ public class TableGenerator
 
     private String getCreateSQLForColumn(ColumnDefinition pinfo) throws Exception {
         String columnName = String.format(StringSupport.CSFmtStrToJFmtStr("{0}{1}{2}"),_translator.getOpeningIdentifier(),pinfo.getColumnName(),_translator.getClosingIdentifier());
-        return columnName + " " + _translator.GetDataTypeExpression(pinfo);
+        return columnName + " " + _translator.getDataTypeExpression(pinfo);
     }
 
 }

@@ -1228,8 +1228,4 @@ public class DelimitedReader implements java.sql.ResultSet {
     public boolean isWrapperFor(Class<?> aClass) throws SQLException {
         return false;
     }
-
-
-
-
 }
