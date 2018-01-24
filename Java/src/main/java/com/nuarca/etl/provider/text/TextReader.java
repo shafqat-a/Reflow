@@ -1,5 +1,6 @@
 package com.nuarca.etl.provider.text;
 
+import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.rmi.activation.Activator;
 import java.sql.ResultSet;
@@ -43,8 +44,8 @@ public class TextReader   implements ILinkReader
             Class readerType =  Class.forName(typeName);
             String file = props.get("@File");
 
-            FileStreamSupport fs = new FileStreamSupport(file, FileMode.Open, FileAccess.Read);
-            _reader = (ResultSet) ReflectionHelper.CreateInstance(readerType);
+            FileInputStream fs = new FileInputStream(file);
+            _reader = (ResultSet) ReflectionHelper.CreateInstance(readerType, fs);
             for (String key : CollectionSupport.mk(props.keySet()))
             {
                 if (!key.startsWith("@"))
@@ -52,7 +53,7 @@ public class TextReader   implements ILinkReader
                     String valueString = props.get(key);
 
                     Object value = getValueFromString(valueString);
-                    Method method = ReflectionHelper.getSetterMethodForProperty( key, readerType);
+                    Method method = ReflectionHelper.getSetterMethodForProperty(  key, readerType);
                     method.invoke(_reader, value);
                 }
 

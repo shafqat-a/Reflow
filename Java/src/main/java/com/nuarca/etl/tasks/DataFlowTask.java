@@ -69,7 +69,7 @@ public class DataFlowTask  extends TaskBase
         getInput().open();
         TransformedReader reader = new TransformedReader(getInput().getReader());
         reader.setMaps(this.getMapping());
-        reader.setScriptingLanguage("VBScript");
+        reader.setScriptingLanguage("JavaScript");
         reader.setTransformationScript(buildScript());
         reader.init();
         getOutput().write(reader,getTableName(),context);

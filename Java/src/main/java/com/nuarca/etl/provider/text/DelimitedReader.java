@@ -24,10 +24,6 @@ public class DelimitedReader implements java.sql.ResultSet {
     boolean _headerFound = false;
     StringBuilder _sbRecord = new StringBuilder();
 
-    public DelimitedReader() {
-
-    }
-
     public DelimitedReader(InputStream stream) throws Exception {
         _stream = stream;
         this.setBufferSize(255);
@@ -42,7 +38,7 @@ public class DelimitedReader implements java.sql.ResultSet {
         _FirstRowHasNames = value;
     }
 
-    private String _ColumnSeperator;
+    private String _ColumnSeperator=",";
     public String getColumnSeperator() {
         return _ColumnSeperator;
     }
@@ -51,7 +47,7 @@ public class DelimitedReader implements java.sql.ResultSet {
         _ColumnSeperator = value;
     }
 
-    private String _RowSeperator;
+    private String _RowSeperator="\n";
     public String getRowSeperator() {
         return _RowSeperator;
     }
@@ -196,6 +192,10 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public boolean next() throws SQLException {
         try {
+            if (this.isClosed()){
+                this.open();
+            }
+
             return read();
         } catch ( Exception ex){
             throw  new SQLException(ex);
@@ -451,12 +451,27 @@ public class DelimitedReader implements java.sql.ResultSet {
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
-        return null;
+
+
+        Metadata data = new Metadata();
+        try {
+            for (String field : this.getFieldNames()) {
+                MetaRow row = new MetaRow();
+                row.type = JDBCType.VARCHAR;
+                row.precision = 200;
+                row.name = field;
+                data.getList().add(row);
+            }
+        } catch (Exception e){
+            throw new SQLException(e);
+        }
+        return data;
+
     }
 
     @Override
     public Object getObject(int i) throws SQLException {
-        return null;
+        return _values[i];
     }
 
     @Override
@@ -981,6 +996,7 @@ public class DelimitedReader implements java.sql.ResultSet {
 
     @Override
     public boolean isClosed() throws SQLException {
+        if (_reader == null) return true;
         return false;
     }
 
@@ -1208,20 +1224,7 @@ public class DelimitedReader implements java.sql.ResultSet {
        return 0;
     }
 
-    /*
-    public System.Data.DataTable getSchemaTable() throws Exception {
-        DataTable dt = new DataTable();
-        dt.Columns.Add("ColumnName", String.class);
-        dt.Columns.Add("ColumnSize", int.class);
-        for (String field : this.getFieldNames())
-        {
-            DataRow row = dt.NewRow();
-            row.<String>SetField("ColumnName", field);
-            row.<Integer>SetField("ColumnSize", 100);
-            dt.Rows.Add(row);
-        }
-        return dt;
-    }*/
+
 
     @Override
     public <T> T unwrap(Class<T> aClass) throws SQLException {

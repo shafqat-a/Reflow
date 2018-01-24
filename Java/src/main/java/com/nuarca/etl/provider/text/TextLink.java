@@ -5,7 +5,11 @@ import CS2JNet.System.StringSupport;
 import com.nuarca.etl.ColumnDefinition;
 import com.nuarca.etl.provider.IDataLink;
 
+import java.sql.JDBCType;
+import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class TextLink   implements IDataLink
 {
@@ -43,27 +47,26 @@ public class TextLink   implements IDataLink
 
     public ColumnDefinition[] getSchema(String query) throws Exception {
 
-        throw new Exception("Not implemented");
-//        TextReader reader = new TextReader();
-//        reader.initialize(this);
-//        reader.open();
-//        reader.getReader().Read();
-//        DataTable tbl = reader.getReader().GetSchemaTable();
-//        CSList<ColumnDefinition> items = new CSList<ColumnDefinition>();
-//        for (Object __dummyForeachVar1 : tbl.Rows)
-//        {
-//            DataRow row = (DataRow)__dummyForeachVar1;
-//            ColumnDefinition col = new ColumnDefinition();
-//            col.setColumnName(row["ColumnName"] instanceof String ? (String)row["ColumnName"] : (String)null);
-//            col.setLength((int)row["ColumnSize"]);
-//            col.setDataType(DbType.String);
-//            col.setIsLong(false);
-//            col.setIsNullable(true);
-//            items.add(col);
-//        }
-//        reader.getReader().Close();
-//        return ((ColumnDefinition[]) items.toArray());
-        //return null;
+        //throw new Exception("Not implemented");
+        TextReader reader = new TextReader();
+        reader.initialize(this);
+        reader.open();
+        reader.getReader().next();
+        ResultSetMetaData meta = reader.getReader().getMetaData();
+        List<ColumnDefinition> items = new ArrayList<ColumnDefinition>();
+        int colCount = meta.getColumnCount();
+        for (int i=0; i<colCount;i++)
+        {
+            ColumnDefinition col = new ColumnDefinition();
+            col.setColumnName(meta.getColumnName(i));
+            col.setLength(meta.getPrecision(i));
+            col.setDataType(JDBCType.VARCHAR);
+            col.setIsLong(false);
+            col.setIsNullable(true);
+            items.add(col);
+        }
+        reader.getReader().close();
+        return ((ColumnDefinition[]) items.toArray());
     }
 
 

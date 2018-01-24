@@ -8,6 +8,7 @@ package com.nuarca.etl.transformation;
 import CS2JNet.System.NotImplementedException;
 import CS2JNet.System.StringSupport;
 
+import java.io.Console;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -20,6 +21,7 @@ import java.util.*;
 import com.nuarca.etl.ColumnMappings;
 
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 //import com.nuarca.etl.Transformation.ScriptFactory;
 
@@ -44,12 +46,14 @@ public class TransformedReader  implements java.sql.ResultSet
 
                 _rec.put(_fields.get(i), _source.getObject(i));
                 //sb.AppendLine(string.Format("{0} = {1}",_fields[i], GetStringExpression(_source.GetValue(i))));
-                sb.append((String.format(StringSupport.CSFmtStrToJFmtStr("{0} = {1}"),_fields.get(i),"Record.Item(\"" + _fields.get(i) + "\")")) + System.getProperty("line.separator"));
+                sb.append((String.format(StringSupport.CSFmtStrToJFmtStr("{0} = {1};\n"),_fields.get(i),"Record.get(\"" + _fields.get(i) + "\")")) + System.getProperty("line.separator"));
             }
             //Console.WriteLine(sb.ToString());
             String strToEval = sb.toString() + "\r\n" + this.getTransformationScript();
             try {
+                _eng.eval("aaa=1;");
                 _eng.eval(strToEval);
+                int a =1;
             }
             catch ( ScriptException exJ){
                 throw new SQLException(exJ);
@@ -248,7 +252,7 @@ public class TransformedReader  implements java.sql.ResultSet
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
-        return null;
+        return _source.getMetaData();
     }
 
     @Override
@@ -1016,20 +1020,23 @@ public class TransformedReader  implements java.sql.ResultSet
     }
 
     public void setTransformationScript(String s) {
+        __TransformationScript = s;
     }
 
     List<String> _fields = new ArrayList<String>();
 
     public void init() throws Exception{
-        //_eng = ScriptFactory.getScriptEngine(this.getScriptingLanguage());
+        ScriptEngineManager factory = new ScriptEngineManager();
+        // create a JavaScript engine
+        _eng =factory.getEngineByName(this.getScriptingLanguage());
         ResultSetMetaData meta = _source.getMetaData();
         int colCount = meta.getColumnCount();
-        for (int i = 0;i <colCount;i++)
+        for (int i = 1;i <=colCount;i++)
         {
             _fields.add(meta.getColumnName(i));
         }
-        //_eng.AddHostObject("Record", _rec);
-        //_eng.AddHostType("Console", Console.class);
+        _eng.put("Record", _rec);
+        _eng.put("Console", Console.class);
     }
 
     HashMap<String,Object> _rec = new HashMap<String,Object>();
@@ -1046,12 +1053,12 @@ public class TransformedReader  implements java.sql.ResultSet
 
     private String __TransformationScript;
     public String getTransformationScript() {
-        return __TransformationScript;
+        return __TransformationScript == null ? "" : __TransformationScript;
     }
 
 
 
-    private String __ScriptingLanguage;
+    private String __ScriptingLanguage="JavaScript";
     public String getScriptingLanguage() {
         return __ScriptingLanguage;
     }

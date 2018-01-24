@@ -32,10 +32,10 @@ public class Main {
         try {
 
             TextProvider tprov = new TextProvider();
-            IDataLink lnkSrc =  tprov.createLink("@Type=Delimited;File=/home/shafqat/git/reflow/Java/src/test/res/data.csv");
+            IDataLink lnkSrc =  tprov.createLink("@Type=Delimited;@File=/home/shafqat/git/reflow/Java/src/test/res/data.csv;FirstRowHasNames=true;");
             ILinkReader reader = tprov.createReader(lnkSrc, "Select * from data.csv");
 
-            String sqlConnectionString = "jdbc:sqlserver://11.10.111.1:1433;databaseName=test;user=sa;password=orion123@";
+            String sqlConnectionString = "jdbc:sqlserver://localhost:1401;databaseName=master;user=sa;password=Nuarca123!";
             SqlLinkProvider destProv = new SqlLinkProvider();
             IDataLink lnkDst = destProv.createLink(sqlConnectionString);
             ILinkWriter writer = destProv.createWriter(lnkDst, "abc");
@@ -59,6 +59,7 @@ public class Main {
 
         } catch ( Exception ex){
             System.out.println(ex);
+            ex.printStackTrace();
         }
 
 
@@ -81,6 +82,7 @@ public class Main {
             System.out.println(ex.toString());
         }
     }
+
     public  static  void testScriptEngine()  {
         // create a script engine manager
         ScriptEngineManager factory = new ScriptEngineManager();
