@@ -15,19 +15,21 @@ public class RowDelimitedObjectReader extends DelimitedReader {
         return  _objectDefitions;
     }
 
-    private boolean streamingMode = false;
+    private boolean isStreamingMode = false;
     public boolean getStreamingMode () {
-        return streamingMode;
+        return isStreamingMode;
     }
 
     public void setStreamingMode (boolean mode){
-        streamingMode = mode;
+        isStreamingMode = mode;
     }
 
     public RowDelimitedObject readNextObject (){
 
     }
 
+    private RowDelimitedObjectDefinition _currentObjectType = null;
+    private String _currentStringData = null;
 
     @Override
     public String[] processRowElement(String content, String[] fieldSeperator) throws Exception {
@@ -35,8 +37,13 @@ public class RowDelimitedObjectReader extends DelimitedReader {
             if (objDef.getOnTaskExecutionEvent().IsValidRecord(content)){
                 // Found object
                 System.out.println("Found object : " + objDef.getName());
+                _currentObjectType = objDef;
+                _currentStringData = content    ;
+                return null;
             }
         }
+        _currentObjectType = null;
+        _currentStringData = null;
         return null;
     }
 
