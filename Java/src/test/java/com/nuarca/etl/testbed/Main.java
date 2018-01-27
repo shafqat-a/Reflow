@@ -5,14 +5,14 @@ import com.nuarca.etl.provider.IDataLink;
 import com.nuarca.etl.provider.ILinkReader;
 import com.nuarca.etl.provider.ILinkWriter;
 import com.nuarca.etl.provider.sqlserver.SqlLinkProvider;
-import com.nuarca.etl.provider.text.DelimitedReader;
-import com.nuarca.etl.provider.text.TextProvider;
+import com.nuarca.etl.provider.text.*;
 import com.nuarca.etl.tasks.DataFlowTask;
 
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.io.FileInputStream;
+import java.sql.ResultSet;
 import java.util.HashMap;
 
 public class Main {
@@ -20,14 +20,14 @@ public class Main {
     public static void main ( String[] argv){
 
         //testTextDelimitedReader("/home/shafqat/Documents/employee.csv");
+        //testTextDelimitedReader("/home/shafqat/git/reflow/Java/src/test/res/data.csv");
         //testScriptEngine ();
-        testCsvImportBasic();
+        //testCsvImportBasic();
 
+        testFixedLengthMultuObjectReader();
     }
 
     public static void testCsvImportBasic() {
-
-
 
         try {
 
@@ -65,7 +65,58 @@ public class Main {
 
     }
 
+    public static void testFixedLengthMultuObjectReader() {
 
+        try {
+
+            TextProvider tprov = new TextProvider();
+            IDataLink lnkSrc = tprov.createLink("@Type=RowDelimitedObject;@File=/home/shafqat/Downloads/s00001vt1.dat;FirstRowHasNames=false;");
+            ILinkReader lnreader = tprov.createReader(lnkSrc, "Select * from data.csv");
+            lnreader.open();
+            ResultSet reader = lnreader.getReader();
+            RowDelimitedObjectReader rdoReader = (RowDelimitedObjectReader)reader;
+
+            RowDelimitedObjectDefinition fileHeader = new RowDelimitedObjectDefinition();
+            fileHeader.setName("File Header");
+            fileHeader.setIsValidRecordHandler((String content)-> {
+                if (content.substring(0,2).equals("00")){
+                    return true;
+                } else
+                    return false;
+            });
+            rdoReader.getObjectDefinitions().add(fileHeader);
+
+            RowDelimitedObjectDefinition detailRecord = new RowDelimitedObjectDefinition();
+            detailRecord.setName("Detail Record");
+            detailRecord.setIsValidRecordHandler((String content)-> {
+                if (content.substring(0,2).equals("02")){
+                    return true;
+                } else
+                    return false;
+            });
+            rdoReader.getObjectDefinitions().add(detailRecord);
+
+            RowDelimitedObjectDefinition requestTrailer = new RowDelimitedObjectDefinition();
+            requestTrailer.setName("Detail Record");
+            requestTrailer.setIsValidRecordHandler((String content)-> {
+                if (content.substring(0,2).equals("03")){
+                    return true;
+                } else
+                    return false;
+            });
+            rdoReader.getObjectDefinitions().add(requestTrailer);
+
+
+            while ( reader.next()){
+                System.out.println("Row -----------------------");
+            }
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+            ex.printStackTrace();
+        }
+
+    }
 
     public static void testTextDelimitedReader (String filename){
 
@@ -76,10 +127,23 @@ public class Main {
             reader.setRowSeperator("\n");
             reader.setFirstRowHasNames(true);
             reader.open();
-            reader.read();
-            reader.read();
+            int colCount = reader.getMetaData().getColumnCount();
+            int row=1;
+            while ( reader.read()){
+                System.out.print(row);
+                System.out.print(" -> ");
+                for ( int i=0; i < colCount; i ++){
+                    System.out.print(reader.getString(i));
+                    if ( i+1!=colCount){
+                        System.out.print(",");
+                    }
+                }
+                System.out.println("");
+                row++;
+            }
         } catch ( Exception ex){
-            System.out.println(ex.toString());
+            //System.out.println(ex.toString());
+            ex.printStackTrace();
         }
     }
 

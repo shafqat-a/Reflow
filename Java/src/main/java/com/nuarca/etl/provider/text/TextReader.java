@@ -18,6 +18,7 @@ import com.nuarca.etl.helper.ReflectionHelper;
 import com.nuarca.etl.provider.IDataLink;
 import com.nuarca.etl.provider.ILinkReader;
 import com.sun.xml.internal.bind.v2.model.core.PropertyInfo;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 
 public class TextReader   implements ILinkReader
 {
@@ -58,7 +59,10 @@ public class TextReader   implements ILinkReader
                 }
 
             }
-            _reader.next();
+            if ( _reader instanceof IOpenClose){
+                IOpenClose open = (IOpenClose) _reader;
+                open.open();
+            }
         }
 
         return false;

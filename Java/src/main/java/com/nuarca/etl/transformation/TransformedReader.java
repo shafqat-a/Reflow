@@ -77,7 +77,13 @@ public class TransformedReader  implements java.sql.ResultSet
 
     @Override
     public String getString(int i) throws SQLException {
-        return null;
+        String columnfName = _fields.get(i-1);
+        Object obj =_rec.get(columnfName);
+        if ( obj!=null){
+            return obj.toString();
+        } else {
+            return  null;
+        }
     }
 
     @Override
@@ -782,7 +788,7 @@ public class TransformedReader  implements java.sql.ResultSet
 
     @Override
     public boolean isClosed() throws SQLException {
-        return false;
+        return _source.isClosed();
     }
 
     @Override

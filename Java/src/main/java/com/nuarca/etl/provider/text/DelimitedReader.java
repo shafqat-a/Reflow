@@ -15,7 +15,7 @@ import CS2JNet.System.StringSplitOptions;
 import CS2JNet.System.StringSupport;
 import CS2JNet.System.Text.EncodingSupport;
 
-public class DelimitedReader implements java.sql.ResultSet {
+public class DelimitedReader implements java.sql.ResultSet, IOpenClose {
 
     private InputStream _stream;
     private String[] _values;
@@ -23,6 +23,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     int _pos = 0;
     boolean _headerFound = false;
     StringBuilder _sbRecord = new StringBuilder();
+    int _jdbcColOffset =0;
 
     public DelimitedReader(InputStream stream) throws Exception {
         _stream = stream;
@@ -157,7 +158,7 @@ public class DelimitedReader implements java.sql.ResultSet {
                 else
                 {
                     // This is a row. Read the row and read field values
-                    _values = processValues(line,fieldSeperator);
+                    _values = processRowElement(line,fieldSeperator);
                     // We compleated reading the line from buffer and procees the values
                     readComplete = true;
                 }
@@ -175,7 +176,16 @@ public class DelimitedReader implements java.sql.ResultSet {
         return true && lastBytesRead != -1;
     }
 
-    private String[] processFieldNames(String[] fields) throws Exception {
+
+    public String[] processRowElement ( String content, String[] fieldSeperator) throws Exception{
+        return processValues( content, fieldSeperator );
+    }
+
+    private String[] processFieldNames(String[] fields) throws Exception{
+        return  processValues(fields);
+    };
+
+    private String[] processValues(String[] fields) throws Exception {
         ArrayList<String> names = new ArrayList<String>();
         for (String field : fields)
         {
@@ -230,7 +240,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public String getString(int i) throws SQLException {
         try {
-            return _values[i];
+            return _values[i+_jdbcColOffset];
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -239,7 +249,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public boolean getBoolean(int i) throws SQLException {
         try {
-            return Boolean.parseBoolean( _values[i]);
+            return Boolean.parseBoolean( _values[i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -248,7 +258,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public byte getByte(int i) throws SQLException {
         try {
-            return Byte.parseByte( _values[i]);
+            return Byte.parseByte( _values [i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -257,7 +267,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public short getShort(int i) throws SQLException {
         try {
-            return Short.parseShort( _values[i]);
+            return Short.parseShort( _values [i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -266,7 +276,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public int getInt(int i) throws SQLException {
         try {
-            return Integer.parseInt(_values[i]);
+            return Integer.parseInt(_values[i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -275,7 +285,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public long getLong(int i) throws SQLException {
         try {
-            return Long.parseLong( _values[i]);
+            return Long.parseLong( _values[i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -285,7 +295,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public float getFloat(int i) throws SQLException {
         try {
-            return Float.parseFloat( _values[i]);
+            return Float.parseFloat( _values[i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -294,7 +304,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public double getDouble(int i) throws SQLException {
         try {
-            return Double.parseDouble( _values[i]);
+            return Double.parseDouble( _values[i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -313,7 +323,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public java.sql.Date getDate(int i) throws SQLException {
         try {
-            return Date.valueOf(_values[i]);
+            return Date.valueOf(_values[i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -322,7 +332,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public Time getTime(int i) throws SQLException {
         try {
-            return Time.valueOf( _values[i]);
+            return Time.valueOf( _values[i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -332,7 +342,7 @@ public class DelimitedReader implements java.sql.ResultSet {
     @Override
     public Timestamp getTimestamp(int i) throws SQLException {
         try {
-            return Timestamp.valueOf( _values[i]);
+            return Timestamp.valueOf( _values[i+_jdbcColOffset]);
         } catch (Exception ex){
             throw new SQLException(ex);
         }
@@ -471,7 +481,7 @@ public class DelimitedReader implements java.sql.ResultSet {
 
     @Override
     public Object getObject(int i) throws SQLException {
-        return _values[i];
+        return _values[i+_jdbcColOffset];
     }
 
     @Override
