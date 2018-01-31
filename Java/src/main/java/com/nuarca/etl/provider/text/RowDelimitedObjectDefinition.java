@@ -3,13 +3,6 @@ package com.nuarca.etl.provider.text;
 
 import com.nuarca.etl.helper.StringHelper;
 import jdk.nashorn.api.scripting.JSObject;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.omg.CORBA.PUBLIC_MEMBER;
-
-import javax.print.DocFlavor;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.util.ArrayList;
 import java.util.List;
 
