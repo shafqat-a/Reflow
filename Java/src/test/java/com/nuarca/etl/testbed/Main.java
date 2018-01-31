@@ -1,6 +1,7 @@
 package com.nuarca.etl.testbed;
 
 import com.nuarca.etl.*;
+import com.nuarca.etl.helper.StringHelper;
 import com.nuarca.etl.provider.IDataLink;
 import com.nuarca.etl.provider.ILinkReader;
 import com.nuarca.etl.provider.ILinkWriter;
@@ -12,8 +13,12 @@ import com.nuarca.etl.tasks.DataFlowTask;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.List;
+
 
 public class Main {
 
@@ -24,7 +29,13 @@ public class Main {
         //testScriptEngine ();
         //testCsvImportBasic();
 
-        testFixedLengthMultuObjectReader();
+        //String test = "012345678901234567890";
+
+        //System.out.println(StringHelper.SubString( test, 0, 2, 0));
+        //System.out.println(StringHelper.SubString( test, 1, 2, 1));
+
+
+         testFixedLengthMultuObjectReader();
     }
 
     public static void testCsvImportBasic() {
@@ -71,19 +82,40 @@ public class Main {
 
             TextProvider tprov = new TextProvider();
             IDataLink lnkSrc = tprov.createLink("@Type=RowDelimitedObject;@File=/home/shafqat/Downloads/s00001vt1.dat;FirstRowHasNames=false;");
-            ILinkReader lnreader = tprov.createReader(lnkSrc, "Select * from data.csv");
+            ILinkReader lnreader = tprov.createReader(lnkSrc, "");
             lnreader.open();
             ResultSet reader = lnreader.getReader();
             RowDelimitedObjectReader rdoReader = (RowDelimitedObjectReader)reader;
 
+            String jsonContent = new String(Files.readAllBytes(Paths.get("/home/shafqat/git/reflow/Java/src/test/res/voted-unvoted-broadridge.json.js")));
+
+            rdoReader.loadRowDelimitedObjectDefintions(jsonContent);
+            RowDelimitedObject rdo = ((RowDelimitedObjectReader) reader).readNextObject();
+            while ( rdo!=null){
+                //System.out.println(">---- Reading row ----->");
+                System.out.println( rdo.getObjectString());
+                rdo = ((RowDelimitedObjectReader) reader).readNextObject();
+            }
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+            ex.printStackTrace();
+        }
+
+            /*
+
             RowDelimitedObjectDefinition fileHeader = new RowDelimitedObjectDefinition();
             fileHeader.setName("File Header");
             fileHeader.setIsValidRecordHandler((String content)-> {
-                if (content.substring(0,2).equals("00")){
-                    return true;
-                } else
-                    return false;
+
+                if ( content.length()==400){
+                    if (content.substring(0,2).equals("00")){
+                        return true;
+                    }
+                }
+                return false;
             });
+
             rdoReader.getObjectDefinitions().add(fileHeader);
 
             RowDelimitedObjectDefinition detailRecord = new RowDelimitedObjectDefinition();
@@ -95,9 +127,12 @@ public class Main {
                     return false;
             });
             rdoReader.getObjectDefinitions().add(detailRecord);
+            detailRecord.addFieldDefinition("record_type", 1,2);
+            detailRecord.addFieldDefinition("control_number", 3,12);
+
 
             RowDelimitedObjectDefinition requestTrailer = new RowDelimitedObjectDefinition();
-            requestTrailer.setName("Detail Record");
+            requestTrailer.setName("Request Trailer");
             requestTrailer.setIsValidRecordHandler((String content)-> {
                 if (content.substring(0,2).equals("03")){
                     return true;
@@ -106,15 +141,7 @@ public class Main {
             });
             rdoReader.getObjectDefinitions().add(requestTrailer);
 
-
-            while ( reader.next()){
-                System.out.println("Row -----------------------");
-            }
-
-        } catch (Exception ex) {
-            System.out.println(ex);
-            ex.printStackTrace();
-        }
+            */
 
     }
 

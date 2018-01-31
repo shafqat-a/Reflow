@@ -1,7 +1,15 @@
 package com.nuarca.etl.provider.text;
 
 
+import com.nuarca.etl.helper.StringHelper;
+import jdk.nashorn.api.scripting.JSObject;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import jdk.nashorn.internal.parser.JSONParser;
+import org.omg.CORBA.PUBLIC_MEMBER;
+
 import javax.print.DocFlavor;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +23,7 @@ public class RowDelimitedObjectDefinition {
 
     @FunctionalInterface
     public interface CustomParser {
-        public String[] ParseCustom(String rowContent);
+        public RowDelimitedObject ParseCustom(String rowContent);
     }
 
 
@@ -38,16 +46,16 @@ public class RowDelimitedObjectDefinition {
         _onRowAvailable = handler;
     }
 
-    public class FieldDefinition {
+    public static class FieldDefinition {
         public String Name;
         public int Start;
-        public int End;
+        public int Length;
 
         public FieldDefinition(){}
-        public FieldDefinition (String name, int start, int end){
+        public FieldDefinition (String name, int start, int length){
             Name = name;
             Start = start;
-            End = end;
+            Length = length;
         }
     }
 
@@ -73,7 +81,7 @@ public class RowDelimitedObjectDefinition {
 
     }
 
-    public String[] parse(String content) {
+    public RowDelimitedObject parse(String content) {
         if (this.customParser!=null){
             return this.customParser.ParseCustom(content);
         } else {
@@ -81,13 +89,25 @@ public class RowDelimitedObjectDefinition {
         }
     }
 
-    String[] parseDefault (String content) {
-        List<String> values = new ArrayList<>();
+    RowDelimitedObject parseDefault (String content) {
+        RowDelimitedObject rdo = new RowDelimitedObject();
+        rdo.setName(this.getName());
         for(FieldDefinition def : this.fieldDefinitions){
-            String value = content.substring(def.Start-1, def.End - def.Start);
-            values.add(value);
+            String value = StringHelper.SubString(content, def.Start, def.Length, 0);
+            //content.substring(def.Start, def.End);
+            rdo.put(def.Name, value);
         }
-        return (String[]) values.toArray();
+
+        return rdo;
     }
 
+    private JSObject JsonObject;
+
+    public JSObject getJsonObject() {
+        return JsonObject;
+    }
+
+    public void setJsonObject(JSObject jsonObject) {
+        JsonObject = jsonObject;
+    }
 }
